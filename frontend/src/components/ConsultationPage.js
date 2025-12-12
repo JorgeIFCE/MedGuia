@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PatientService from "../services/PatientService";
 import "./ConsultationPage.css";
+import PrescriptionModal from "./PrescriptionModal";
+import ConsultationService from "../services/ConsultationService";
+
+
 
 function ConsultationPage({ onBack }) {
   const [cpf, setCpf] = useState("");
@@ -9,6 +13,88 @@ function ConsultationPage({ onBack }) {
   const [numero, setNumero] = useState("");
   const [email, setEmail] = useState("");
   const [erro, setErro] = useState("");
+  const [dataConsulta, setDataConsulta] = useState("");
+
+  // 🔵 Estrutura completa das linhas de sintomas
+const categorias = [
+  {
+    nome: "Sintomas Gerais",
+    itens: ["Febre", "Fadiga", "Perda de peso", "Sudorese", "Prurido", "Calafrios", "Astenia", "Adnamia", "Icterícia", "Palidez", "Fraqueza", "Anorexia"],
+  },
+  {
+    nome: "Pele e Anexos",
+    itens: ["Prurido", "Fotossensibilidade", "Rash", "Alterações de pigmentação", "Alterações do revestimento cutâneo", "Lesões primarias", "Alopécia", "Hipertricose", "Alteração ungueal"],
+  },
+  {
+    nome: "Cabeça e Pescoço",
+    itens: ["Dor", "Cefaleia", "Alteração dos movimentos", "Nodulações", "Adenomegalias", "Disfonia"],
+  },
+  {
+    nome: "Aparelho Ocular",
+    itens: ["Dor ocular", "Fotofobia", "Diplopia", "Xeroftalmia", "Sensação de corpo estranho", "Lacrimejamento", "Nistagmo"],
+  },
+  {
+    nome: "Aparelho Auditivo",
+    itens: ["Trauma", "Lesões da pele", "Otalgia", "Otorreia", "Otorragia", "Zumbido", "Acúfenos", "Hipoacusia"],
+  },
+  {
+    nome: "Nariz e Cavidades Paranasais",
+    itens: ["Alterações da olfação", "Rinorreia", "Obstrução nasal", "Crise esternutatórias", "Epistaxe"],
+  },
+  {
+    nome: "Cavidade Bucal e Anexos",
+    itens: ["Lesões de mucosa oral", "Halitose", "Disfagia", "Disfonia", "Odinofagia", "Xerostomia", "Rouquidão", "Diseugias", "Sialose"],
+  },
+  {
+    nome: "Aparelho Respiratório",
+    itens: ["Dor Ventilatorio Dependente", "Dispneia", "Ortopneia", "Trepopneia", "Platipneia", "Dispneia Paroxistica Noturna", "Tosse", "Expectoração", "Vômica", "Hemoptise", "Alteração Do Forma Do Torax", "Sibilância", "Estertores Subcrepitantes", "Egofonia e/o Pectoriloquia"],
+  },
+  {
+    nome: "Aparelho Cardiovascular",
+    itens: ["Dor Precordial", "Palpitações", "Dispneia", "Dispneia Paroxistica Noturna", "Ortopneia", "Edema", "Cianose", "Palidez", "Sudorese", "Hemoptoicos", "Cardiomegalia", "Edema Agudo de Pulmão", "Derrame Pleural"],
+  },
+  {
+    nome: "Aparelho Digestivo",
+    itens: ["Alterações de Forma do Abdome ou do Apetite", "Dor", "Sialorreia", "Halitose", "Disfagia", "Odinofagia", "Pirose", "Regurgitação", "Náuseas", "Vômitos", "Icterícia", "Intolerância Alimentar", "Hematêmese", "Hematoquezia", "Plenitude Gástrica", "Empachamento Pós-prandial", "Diarreia", "Disenteria", "Esteatorreia", "Constipação", "Flatulência", "Tenesmo", "Dor anal", "Disquezia"],
+  },
+  {
+    nome: "Aparelho Genito-urinário",
+    itens: ["Alterações Miccionais", "Alterações do Volume", "Alterações do Ritmo", "Alterações de Cor", "Alterações no cheiro", "Edema", "Dor Lombar"],
+  },
+  {
+    nome: "Sistema Nervoso",
+    itens: ["Distúrbios da Motricidade e da Sensibilidade", "Alterações do Olfato", "Audição", "Visão", "Equilíbrio", "Nível de Consciência", "Disfunções Esfincterianas", "Alterações de Sono-vigilia", "Funções Corticais Superiores"],
+  },
+  {
+    nome: "Sistema Músculo-esquelético",
+    itens: ["Dor", "Rigidez Pós-repouso", "Sinais Inflamatórios", "Crepitação Articular", "Deformidades", "Restrição de Mobilidade", "Tofos", "Nódulos", "Alterações da Força e do Tônus Muscular", "Atrofia Muscular", "Hipertrofias", "Miotonias", "Tetania", "Cãibras"],
+  },
+  {
+    nome: "Sistema Psiquiátrico",
+    itens: ["Insónia", "Nervosismo", "Depressão", "Alterações de humor", "Histórico de Trastorno Mental", "Sofrimento Psíquico", "TAG"],
+  },
+];
+
+// Estado dos sintomas selecionados
+const [selectedSymptoms, setSelectedSymptoms] = useState([]);
+
+// Alternar seleção
+const toggleSymptom = (symptom) => {
+  setSelectedSymptoms((prev) =>
+    prev.includes(symptom)
+      ? prev.filter((s) => s !== symptom)
+      : [...prev, symptom]
+  );
+};
+
+const [showRecipeModal, setShowRecipeModal] = useState(false);
+
+
+  // 📅 Preenche data ao iniciar a consulta
+  useEffect(() => {
+    const hoje = new Date().toLocaleDateString("pt-BR");
+    setDataConsulta(hoje);
+  }, []);
 
   const handleSearch = async () => {
     setErro("");
@@ -45,13 +131,47 @@ function ConsultationPage({ onBack }) {
     }
   };
 
+  const [qtdMedicamentos, setQtdMedicamentos] = useState("");
+
+  const handleFinishConsultation = async () => {
+  if (!cpf || !nome || !idade) {
+    alert("Preencha os dados do paciente antes de finalizar.");
+    return;
+  }
+
+  if (!qtdMedicamentos || Number(qtdMedicamentos) < 0) {
+    alert("Informe a quantidade de medicamentos.");
+    return;
+  }
+
+  try {
+    await ConsultationService.saveConsultation({
+      patient_cpf: cpf,
+      nome,
+      idade,
+      numero,
+      email,
+      medicacao: qtdMedicamentos,
+    });
+
+    alert("Consulta finalizada com sucesso!");
+    onBack(); // ⬅️ Voltar para DoctorPage
+  } catch (error) {
+    console.error(error);
+    alert("Erro ao salvar consulta.");
+  }
+};
+
+
   return (
     <div className="consultation-container">
       <header className="consultation-header">
         <h1>MedGuia</h1>
+        <button className="btn-back" onClick={onBack}>Voltar</button>
       </header>
 
       <main className="consultation-main">
+        {/* Dados do paciente */}
         <section className="patient-data">
           <h2>Dados da consulta</h2>
           <p>Preencha os campos com os dados do paciente</p>
@@ -69,16 +189,21 @@ function ConsultationPage({ onBack }) {
             <button onClick={handleRegister}>Registrar paciente</button>
           </div>
 
+          {/* Data da consulta */}
+          <div className="form-row">
+            <input type="text" value={dataConsulta} disabled className="data-field" />
+          </div>
+
           <div className="form-row">
             <input
               type="text"
-              placeholder="Digite o nome do paciente"
+              placeholder="Nome do paciente"
               value={nome}
               onChange={(e) => setNome(e.target.value)}
             />
             <input
               type="number"
-              placeholder="Digite a idade do paciente"
+              placeholder="Idade"
               value={idade}
               onChange={(e) => setIdade(e.target.value)}
             />
@@ -93,28 +218,75 @@ function ConsultationPage({ onBack }) {
             />
             <input
               type="email"
-              placeholder="Digite o email do paciente"
+              placeholder="Email do paciente"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
         </section>
 
+        {/* 🔵 Sintomas */}
         <section className="symptom-section">
-          <h2>Selecione os sintomas</h2>
-          <p>Selecione os sintomas percebidos durante a anamnese do paciente</p>
+  <h2>Selecione os sintomas</h2>
+  <p>Selecione os sintomas percebidos durante a anamnese</p>
 
-          <button className="btn-suggestion">Gerar Sugestão</button>
+  {categorias.map((categoria, index) => (
+    <div key={index} className="categoria-container">
+      <h3 className="categoria-titulo">{categoria.nome}</h3>
 
-          <div className="symptom-grid">
-            <div className="symptom-card">Sintoma 1<br />Descrição do sintoma</div>
-            <div className="symptom-card">Sintoma 2<br />Descrição do sintoma</div>
-            <div className="symptom-card">Sintoma 3<br />Descrição do sintoma</div>
-            <div className="symptom-card">Sintoma 4<br />Descrição do sintoma</div>
+      <div className="symptom-row">
+        {categoria.itens.map((item, i) => (
+          <div
+            key={i}
+            className={`symptom-card-2 ${
+              selectedSymptoms.includes(item) ? "selected" : ""
+            }`}
+            onClick={() => toggleSymptom(item)}
+          >
+            <div className="symptom-icon-2" />
+            <span>{item}</span>
           </div>
+        ))}
+      </div>
+    </div>
+  ))}
 
-          <button className="btn-create">Criar receita</button>
-        </section>
+{/* Quantos medicamentos serão receitados */}
+<div className="medicamentos-container">
+  <h2>Quantos medicamentos serão receitados?</h2>
+
+  <input
+    type="number"
+    min="1"
+    placeholder="Digite a quantidade"
+    className="medicamentos-input"
+    value={qtdMedicamentos}
+    onChange={(e) => setQtdMedicamentos(e.target.value)}
+  />
+</div>
+
+  <button
+  className="btn-create"
+  onClick={() => setShowRecipeModal(true)}
+>
+  Criar receita
+</button>
+
+<button className="btn-finish" onClick={handleFinishConsultation}>
+  Finalizar consulta
+</button>
+
+
+
+{showRecipeModal && (
+  <PrescriptionModal
+    qtdMedicamentos={qtdMedicamentos}
+    onClose={() => setShowRecipeModal(false)}
+  />
+)}
+
+</section>
+
       </main>
 
       <footer className="consultation-footer">

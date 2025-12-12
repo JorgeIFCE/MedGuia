@@ -11,6 +11,28 @@
   padding: 40px;
 }
 
+.btn-back {
+  background-color: #333;
+  color: white;
+  padding: 10px 18px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  float: right;
+  margin-top: -40px;
+}
+
+.btn-back:hover {
+  background-color: #111;
+}
+
+.data-field {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
 .patient-data h2 {
   font-size: 24px;
   margin-bottom: 8px;
@@ -63,17 +85,40 @@ button:hover {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
-  justify-items: center;
-  margin: 20px 0;
+  margin-top: 20px;
 }
 
 .symptom-card {
   background-color: #34495e;
-  border-radius: 8px;
+  color: white;
   padding: 20px;
-  width: 200px;
-  height: 100px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.2s;
+  text-align: center;
 }
+
+.symptom-card:hover {
+  opacity: 0.8;
+}
+
+.symptom-card.selected {
+  background-color: #2563eb;
+  transform: scale(1.03);
+}
+
+.symptom-icon {
+  width: 40px;
+  height: 40px;
+  background-color: gray;
+  border-radius: 6px;
+  margin: 0 auto 10px auto;
+}
+
+.symptom-card.selected .symptom-icon {
+  background-color: white;
+}
+
 
 .btn-suggestion {
   background-color: #2563eb;
@@ -84,4 +129,94 @@ button:hover {
   background-color: #2563eb;
   color: white;
   margin-top: 20px;
+}
+
+/* CATEGORIAS DE SINTOMAS */
+.categoria-container {
+  margin: 30px 0;
+  color: white;
+}
+
+.categoria-titulo {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* Linha horizontal de sintomas */
+.symptom-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+/* Cada sintoma */
+.symptom-card-2 {
+  background-color: #34495e;
+  color: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  min-width: 140px;
+  text-align: center;
+  font-size: 15px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.symptom-card-2:hover {
+  transform: scale(1.02);
+  opacity: 0.9;
+}
+
+/* quando selecionado */
+.symptom-card-2.selected {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+/* Icone do sintoma */
+
+
+/* Icone muda quando selecionado */
+.symptom-card-2.selected {
+  background-color: white;
+}
+
+/* Quantidade de medicamentos */
+.medicamentos-container {
+  margin-top: 40px;
+  margin-bottom: 20px;
+  text-align: center;
+  color: white;
+}
+
+.medicamentos-container h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.medicamentos-input {
+  width: 200px;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px;
+}
+
+.btn-finish {
+  margin-top: 20px;
+  background-color: #10b981;
+  color: white;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.btn-finish:hover {
+  background-color: #0d946b;
 }

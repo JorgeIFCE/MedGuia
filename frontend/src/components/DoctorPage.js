@@ -5,7 +5,7 @@ import ConsultationPage from "./ConsultationPage";
 import "./DoctorPage.css";
 
 function DoctorPage() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();   // ⬅️ importa o logout
   const [consultations, setConsultations] = useState([]);
   const [inConsultation, setInConsultation] = useState(false);
 
@@ -29,6 +29,9 @@ function DoctorPage() {
     <div className="doctor-page-container">
       <header className="doctor-page-header">
         <h1>MedGuia</h1>
+        <button className="btn-logout" onClick={logout}>
+          Logout
+        </button>
       </header>
 
       <section className="doctor-page-welcome">
@@ -40,6 +43,7 @@ function DoctorPage() {
 
       <section className="doctor-page-consultations">
         <h3>Consultas</h3>
+
         <div className="consultation-list">
           {consultations.length === 0 ? (
             <p>Nenhuma consulta registrada.</p>
@@ -48,7 +52,7 @@ function DoctorPage() {
               <div key={index} className="consultation-card">
                 <div>
                   <strong>Paciente:</strong> {c.nome} <br />
-                  <strong>CPF:</strong> {c.patient_cpf} <br />
+                  <strong>CPF:</strong> {c.patient_cpf || c.cpf} <br />
                   <strong>Idade:</strong> {c.idade} <br />
                   <strong>Contato:</strong> {c.numero} <br />
                   <strong>Email:</strong> {c.email}
