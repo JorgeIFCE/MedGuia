@@ -4,8 +4,6 @@ import "./ConsultationPage.css";
 import PrescriptionModal from "./PrescriptionModal";
 import ConsultationService from "../services/ConsultationService";
 
-
-
 function ConsultationPage({ onBack }) {
   const [cpf, setCpf] = useState("");
   const [nome, setNome] = useState("");
@@ -15,7 +13,6 @@ function ConsultationPage({ onBack }) {
   const [erro, setErro] = useState("");
   const [dataConsulta, setDataConsulta] = useState("");
 
-  // 🔵 Estrutura completa das linhas de sintomas
 const categorias = [
   {
     nome: "Sintomas Gerais",
@@ -75,10 +72,8 @@ const categorias = [
   },
 ];
 
-// Estado dos sintomas selecionados
 const [selectedSymptoms, setSelectedSymptoms] = useState([]);
 
-// Alternar seleção
 const toggleSymptom = (symptom) => {
   setSelectedSymptoms((prev) =>
     prev.includes(symptom)
@@ -90,7 +85,6 @@ const toggleSymptom = (symptom) => {
 const [showRecipeModal, setShowRecipeModal] = useState(false);
 
 
-  // 📅 Preenche data ao iniciar a consulta
   useEffect(() => {
     const hoje = new Date().toLocaleDateString("pt-BR");
     setDataConsulta(hoje);
@@ -155,7 +149,7 @@ const [showRecipeModal, setShowRecipeModal] = useState(false);
     });
 
     alert("Consulta finalizada com sucesso!");
-    onBack(); // ⬅️ Voltar para DoctorPage
+    onBack();
   } catch (error) {
     console.error(error);
     alert("Erro ao salvar consulta.");
@@ -171,7 +165,6 @@ const [showRecipeModal, setShowRecipeModal] = useState(false);
       </header>
 
       <main className="consultation-main">
-        {/* Dados do paciente */}
         <section className="patient-data">
           <h2>Dados da consulta</h2>
           <p>Preencha os campos com os dados do paciente</p>
@@ -188,8 +181,6 @@ const [showRecipeModal, setShowRecipeModal] = useState(false);
             <button onClick={handleSearch}>Buscar paciente</button>
             <button onClick={handleRegister}>Registrar paciente</button>
           </div>
-
-          {/* Data da consulta */}
           <div className="form-row">
             <input type="text" value={dataConsulta} disabled className="data-field" />
           </div>
@@ -224,8 +215,6 @@ const [showRecipeModal, setShowRecipeModal] = useState(false);
             />
           </div>
         </section>
-
-        {/* 🔵 Sintomas */}
         <section className="symptom-section">
   <h2>Selecione os sintomas</h2>
   <p>Selecione os sintomas percebidos durante a anamnese</p>
@@ -250,8 +239,6 @@ const [showRecipeModal, setShowRecipeModal] = useState(false);
       </div>
     </div>
   ))}
-
-{/* Quantos medicamentos serão receitados */}
 <div className="medicamentos-container">
   <h2>Quantos medicamentos serão receitados?</h2>
 

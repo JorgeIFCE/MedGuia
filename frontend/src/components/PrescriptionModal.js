@@ -5,7 +5,6 @@ function PrescriptionModal({ qtdMedicamentos, onClose }) {
   const [medicamentos, setMedicamentos] = useState([]);
 
   useEffect(() => {
-    // Cria as linhas dinamicamente
     const linhas = Array.from({ length: qtdMedicamentos }, () => ({
       nome: "",
       vezesAoDia: "",
@@ -20,7 +19,6 @@ function PrescriptionModal({ qtdMedicamentos, onClose }) {
     setMedicamentos(updated);
   };
 
-  // ---- 📄 GERAR PDF ----
   const gerarPDF = () => {
     const conteudo = medicamentos
       .map(
@@ -45,7 +43,7 @@ Data: ${new Date().toLocaleDateString("pt-BR")}
 
     const link = document.createElement("a");
     link.href = url;
-    link.download = "receita_medica.txt"; // Você pode trocar para .pdf quando usar PDF real
+    link.download = "receita_medica.txt";
     link.click();
   };
 

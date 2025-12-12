@@ -131,7 +131,6 @@ button:hover {
   margin-top: 20px;
 }
 
-/* CATEGORIAS DE SINTOMAS */
 .categoria-container {
   margin: 30px 0;
   color: white;
@@ -143,14 +142,12 @@ button:hover {
   font-weight: bold;
 }
 
-/* Linha horizontal de sintomas */
 .symptom-row {
   display: flex;
   flex-wrap: wrap;
   gap: 15px;
 }
 
-/* Cada sintoma */
 .symptom-card-2 {
   background-color: #34495e;
   color: white;
@@ -171,21 +168,15 @@ button:hover {
   opacity: 0.9;
 }
 
-/* quando selecionado */
 .symptom-card-2.selected {
   background-color: #2563eb;
   transform: scale(1.05);
 }
 
-/* Icone do sintoma */
-
-
-/* Icone muda quando selecionado */
 .symptom-card-2.selected {
   background-color: white;
 }
 
-/* Quantidade de medicamentos */
 .medicamentos-container {
   margin-top: 40px;
   margin-bottom: 20px;

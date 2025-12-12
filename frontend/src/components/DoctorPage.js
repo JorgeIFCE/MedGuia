@@ -5,7 +5,7 @@ import ConsultationPage from "./ConsultationPage";
 import "./DoctorPage.css";
 
 function DoctorPage() {
-  const { user, logout } = useAuth();   // ⬅️ importa o logout
+  const { user, logout } = useAuth();
   const [consultations, setConsultations] = useState([]);
   const [inConsultation, setInConsultation] = useState(false);
 

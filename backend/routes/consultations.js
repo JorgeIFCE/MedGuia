@@ -3,7 +3,6 @@ import db from "../config/db.js";
 
 const router = express.Router();
 
-// Salvar consulta
 router.post("/", async (req, res) => {
   try {
     const {

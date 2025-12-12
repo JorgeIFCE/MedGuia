@@ -1,8 +1,6 @@
-// src/services/ConsultationService.js
 const API_BASE = "http://localhost:3001/api";
 
 const ConsultationService = {
-  // Salvar consulta
   saveConsultation: async (payload) => {
     const resp = await fetch(`${API_BASE}/consultations`, {
       method: "POST",
@@ -17,7 +15,6 @@ const ConsultationService = {
     return data;
   },
 
-  // Buscar TODAS as consultas (Histórico no DoctorPage)
   getAllConsultations: async () => {
     const resp = await fetch(`${API_BASE}/consultations`);
 
@@ -28,7 +25,6 @@ const ConsultationService = {
     return data;
   },
 
-  // (Opcional) Buscar consultas por CPF
   getConsultationsByCpf: async (cpf) => {
     const resp = await fetch(`${API_BASE}/consultations/${cpf}`);
 

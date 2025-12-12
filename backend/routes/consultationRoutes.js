@@ -3,16 +3,12 @@ import db from "../db.js";
 
 const router = express.Router();
 
-// ------------------------
-// SALVAR CONSULTA
-// ------------------------
 router.post("/consultations", async (req, res) => {
   const { patient_cpf, nome, idade, numero, email, medicacao } = req.body;
 
   if (!patient_cpf || !nome || !idade)
     return res.status(400).json({ message: "CPF, nome e idade são obrigatórios" });
 
-  // Validar medicacao (quantidade)
   if (isNaN(medicacao) || medicacao < 0)
     return res.status(400).json({ message: "Quantidade de medicamentos inválida." });
 
@@ -31,9 +27,6 @@ router.post("/consultations", async (req, res) => {
   }
 });
 
-// ------------------------
-// LISTAR TODAS CONSULTAS
-// ------------------------
 router.get("/consultations", async (req, res) => {
   try {
     const [rows] = await db.query(
@@ -45,9 +38,6 @@ router.get("/consultations", async (req, res) => {
   }
 });
 
-// ------------------------
-// CONSULTAS POR CPF
-// ------------------------
 router.get("/consultations/:cpf", async (req, res) => {
   const { cpf } = req.params;
   try {
